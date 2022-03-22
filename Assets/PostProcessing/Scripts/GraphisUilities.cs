@@ -28,8 +28,6 @@ namespace Gesetz
             }
         }
 
-
-
         public static void BlitSRT(this CommandBuffer buffer, RenderTargetIdentifier dest, Material mat, int pass)
         {
             buffer.SetRenderTarget(dest);
@@ -57,5 +55,7 @@ namespace Gesetz
             buffer.SetRenderTarget(colorIdentifier, BuiltinRenderTextureType.CameraTarget);
             buffer.DrawMesh(FullscreenTriangle, Matrix4x4.identity, mat, 0, pass);
         }
+
+
     }
 }

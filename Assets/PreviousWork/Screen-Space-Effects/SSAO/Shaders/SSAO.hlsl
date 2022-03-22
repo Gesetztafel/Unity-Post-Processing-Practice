@@ -1,5 +1,5 @@
-﻿#ifndef SSAO_INCLUDED
-#define SSAO_INCLUDED
+﻿#ifndef GESETZ_SSAO_INCLUDED
+#define GESETZ_SSAO_INCLUDED
 
 //Further Work:
 //Better Down_sampling && Up_sampling with depth aware:
@@ -279,7 +279,7 @@ float4 frag_AO(Varyings input):SV_Target
 	float2 texCoord00 =input.screenuv+float2(-0.25f,-0.25f)*pixelSize;
 
 	float2 p11_22 = float2(unity_CameraProjection._11, unity_CameraProjection._22);
-    float2 p13_31 = float2(unity_CameraProjection._13, unity_CameraProjection._31);
+  float2 p13_31 = float2(unity_CameraProjection._13, unity_CameraProjection._31);
 	//reconstruct position
 	//LinearEyeDepth HalfRef R16f
 	float Linear01depth=_depth_Texture_x4.Sample(sampler_depth_Texture_x4,input.screenuv).x;
@@ -324,6 +324,23 @@ float4 frag_AO(Varyings input):SV_Target
 // TODO
 
 //GTAO
+//GameDev/XeGTAO
+// DEPTH_MIP_LEVELS 5
+
+Texture2D(_Depth_MIP0);
+Texture2D(_Depth_MIP1);
+Texture2D(_Depth_MIP2);
+Texture2D(_Depth_MIP3);
+Texture2D(_Depth_MIP4);
+
+//Quality Level
+// sliceCount stepsPerSlice
+
+float4 frag_GTAO(Varyings input):SV_Target{
+
+}
+
+
 // TODO
 
 //BentNormal
@@ -432,15 +449,15 @@ float computeSpecularAO(float NoV, float ao, float roughness) {
 //[Jimenez 16]
 
 //TODO
-// float3 AOMultiBounce(float visibility,float3 albedo)
-// {
-// 	float3 a =  2.0404f * albedo - 0.3324f;
-//     float3 b = -4.7951f * albedo + 0.6417f;
-//     float3 c =  2.7552f * albedo + 0.6903f;
-//
-// 	float x=visibility;
-// 	return max(x,((x*a+b)*x+c)*x);
-// }
+float3 AOMultiBounce(float visibility,float3 albedo)
+{
+	float3 a =  2.0404f * albedo - 0.3324f;
+    float3 b = -4.7951f * albedo + 0.6417f;
+    float3 c =  2.7552f * albedo + 0.6903f;
+
+	float x=visibility;
+	return max(x,((x*a+b)*x+c)*x);
+}
 
 float4 frag_composition(Varyings i):SV_Target
 {
@@ -452,7 +469,7 @@ float4 frag_composition(Varyings i):SV_Target
 }
 float4 frag_debug(Varyings i):SV_Target
 {
-    float2 uv=i.screenuv;
+  float2 uv=i.screenuv;
 	float ao=_ssaoTexture_upsample.Sample(sampler_ssaoTexture_upsample,uv).r;
 	
 	return float4(ao.xxx, 1.0);
